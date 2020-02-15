@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+
+<div class="container" >
+
+	<div class="row">
+		<div class="col-lg-12">
+		<img src="{% static 'img/blog-banner.jpg' %}" style="width:100%;">
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-lg-12">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+				<li class="breadcrumb-item active"><a href="{% url 'signup' %}">Kayıt Ol!</a></li>
+			</ol>
+		</div>
+	</div>
+
+{%if success_register%}
+	<div class="row" >
+		<div class="col-lg-12" align="center">
+			
+			<div class="card border-yok  mb-3" style="max-width: 100rem;">
+				<div class="card-header">Bilgi</div>
+				<div class="card-body">
+					<h4 class="card-title"></h4>
+					
+					Kaydınız başarıyla gerçekleşti. Anasayfaya gitmek için <a href="{% url 'homepage' %}">tıklayın</a>.
+					
+	
+				</div>
+			</div>
+		</div>
+	</div>
+{%else%}
+	
+	{% if user.is_authenticated%}
+	<div class="row" >
+		<div class="col-lg-12" align="center">
+			
+			<div class="card border-yok  mb-3" style="max-width: 100rem;">
+				<div class="card-header">Bilgi</div>
+				<div class="card-body">
+					<h4 class="card-title"></h4>
+					
+					Üyeliğiniz zaten mevcuttur. Anasayfaya dönmek için <a href="{% url 'homepage' %}">tıklayın</a>.
+					
+	
+				</div>
+			</div>
+		</div>
+	</div>
+	{%else%}
+	<div class="row" >
+		<div class="col-lg-12" align="center">
+			
+			<div class="card border-yok mb-3" style="max-width: 100rem;">
+				<div class="card-header">Giriş Yap!</div>
+				<div class="card-body">
+					<h4 class="card-title"></h4>
+					
+					<div class="signup-form">
+					<form method="POST" class="signup-form" id="signup-form">
+					{% csrf_token %}
+					
+					<div class="card border-yok" style="margin:20px auto; max-width: 30rem;">
+					
+					<div class="card-body">
+					<h4 class="card-title"></h4>
+					
+					<div class="row" style="margin:10px auto;">
+					<div class="col-lg-1">
+					<span class="input-group-addon"><i class="fa fa-user-circle text-warning" style="padding-top:5px; font-size:25px;"></i></span>
+					</div>
+					<div class="col-lg-11">
+					<input type="username" class="form-control" name="username" value="{{fields.0}}" placeholder="Kullanıcı Adı" required="required">
+					</div>
+					</div>
+					
+					<!--<div class="row" style="margin:10px auto;">-->
+					<!--<div class="col-lg-1">-->
+					<!--<span class="input-group-addon"><i class="fa fa-id-card text-info" style="padding-top:5px; font-size:25px;"></i></span>-->
+					<!--</div>-->
+					<!--<div class="col-lg-11">-->
+					<!--<input type="first_name" class="form-control" name="first_name"  placeholder="İsim">-->
+					<!--</div>-->
+					<!--</div>-->
+					<!---->
+					<!--<div class="row" style="margin:10px auto;">-->
+					<!--<div class="col-lg-1">-->
+					<!--<span class="input-group-addon"><i class="fa fa-id-card text-info" style="padding-top:5px; font-size:25px;"></i></span>-->
+					<!--</div>-->
+					<!--<div class="col-lg-11">-->
+					<!--<input type="last_name" class="form-control" name="last_name"  placeholder="Soyisim">-->
+					<!--</div>-->
+					<!--</div>-->
+					
+					<div class="row" style="margin:20px auto;">
+					<div class="col-lg-1">
+					<span class="input-group-addon"><i class="fa fa-envelope text-warning" style="padding-top:5px; font-size:25px;"></i></span>
+					</div>
+					<div class="col-lg-11">
+					<input type="email" class="form-control" name="email"  placeholder="Email" required="required">
+					</div>
+					</div>
+					
+					<div class="row" style="margin:20px auto;">
+					<div class="col-lg-1">
+					<span class="input-group-addon"><i class="fa fa-unlock text-warning" style="padding-top:5px; font-size:25px;"></i></span>
+					</div>
+					<div class="col-lg-11">
+					<input type="password" class="form-control" name="password1"  placeholder="Parola" required="required">
+					</div>
+					</div>
+					
+					<div class="row" style="margin:20px auto;">
+					<div class="col-lg-1">
+					<span class="input-group-addon"><i class="fa fa-lock text-warning" style="padding-top:5px; font-size:25px;"></i></span>
+					</div>
+					<div class="col-lg-11">
+					<input type="password" class="form-control" name="password2" placeholder="Parola tekrar" required="required">
+					
+					<p class="text-muted" align="left" style="padding-top:10px;">*Sadece harfler, rakamlar ve @/./+/-/_ karakterleri kullanılabilir.</p>
+					<p class="text-muted" align="left">*Parolanız diğer kişisel bilgileriniz ile çok benzer olamaz.</p>
+					<p class="text-muted" align="left">*Parolanız en az 8 karakter içermek zorunda.</p>
+					<p class="text-muted" align="left">*Parolanız genellikle kullanılan bir parola olamaz.</p>
+					<p class="text-muted" align="left">*Parolanız tamamıyla sayısal olamaz.</p>
+					</div>
+					
+					
+					
+					</div>
+					
+					
+					
+					
+			
+					<div class="row" style="margin:20px auto;">
+			
+					<div class="col-lg-11">
+					<div class="form-group">
+						<label class="checkbox-inline"><input type="checkbox" name="term_agree" required="required"> &nbsp  <a href="#">Kuralları</a> &amp; <a href="#">Gizlilik Politikasını</a></label> kabul ediyorum.
+					</div>
+					</div>
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					</div>
+					</div>
+					<div class="error text-warning" style="padding-top:10px; padding-bottom:20px;">
+					
+						{{login_error}}
+						
+					{% for field in form %}
+					{% for error in field.errors %}
+					<p style="color: red">{{ error }}</p>
+					{% endfor %}
+					{%endfor%}
+					</div>
+					
+					
+					
+					
+					<div class="form-group">
+					
+					
+					
+					<button type="submit" name="signin" style=" text-transform: none;" class="btn btn-info btn-lg">Giriş</button>
+					<button type="button" name="back" onclick="return window.history.back()" style=" text-transform: none;" class="btn btn-secondary btn-lg">Vazgeç</button>
+					</div>
+					
+					
+					
+					</form>
+					<div class="text-center">Zaten hesabınız var mı? Giriş yapmak için <a href="{% url 'login' %}">tıklayın</a>.</div>
+					</div>
+					
+	
+</div>
+			</div>
+		</div>
+	</div>
+	{%endif%}
+{%endif%}
+	
+</div>
+{% endblock%}

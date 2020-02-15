@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}Blog Listesi
+{% load comments %}
+{% load comments_xtd %}
+
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'post-list-filter' %}">Blog</a></li>
+                <li class="breadcrumb-item active">{{ object.title| truncatewords:"10" }}</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+
+                <div class="card border-yok  mb-3" style="max-width: 100rem;">
+
+
+                    <div class="card-header" style="height:50px;">
+                        <form  id="edit" action="{% url 'add-post' %}" method="get" accept-charset="utf-8"> {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-10" align="left">
+                                        <div class="row" style="margin-top:5px;">
+
+                                            <div class="col-lg-2" align="center" style="padding-left:0px;"><p class="border-right">Yazar<small> : admin</small></p> </div>
+                                            <div class="col-lg-3" align="center" style="padding-left:0px;"><p class="border-right">Tarih<small> : {{ post.publish|date:"l, j F Y" }}</small></p> </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-lg-2" align="right">
+                                         <p align="right">
+
+
+                                           {% if user.is_authenticated and user == object.author %}
+
+
+                                                    <button type="submit" name="edit_or_delete" value="Düzenle" style="outline: none; background-color:#F7F7F7; border:none; width:30px; height:30px; text-align:center;">
+                                                    <span   class="glyphicon glyphicon-edit text-info" style="font-size:18px;"></span>
+                                                    </button>
+
+
+                                                    <button type="submit" name="edit_or_delete" value="Sil" style="outline: none; background-color:#F7F7F7; border:none; width:30px; height:30px; text-align:center;">
+                                                    <span   class="glyphicon glyphicon-trash text-warning" style="font-size:18px;"></span>
+                                                    </button>
+
+
+                                                         <input type="hidden"  name="title" value="{{ object.title}}">
+
+
+                                                      <style type="text/css">
+                                                        .icon-input-btn{
+                                                        display: inline-block;
+                                                        position: relative;
+                                                        }
+                                                        .icon-input-btn input[type="submit"]{
+                                                        padding-left: 2em;
+                                                        }
+                                                        .icon-input-btn .glyphicon{
+                                                        display: inline-block;
+                                                        position: absolute;
+                                                        left: 0.65em;
+                                                        top: 20%;
+                                                        }
+                                                        </style>
+                                                        <script type="text/javascript">
+                                                        $(document).ready(function(){
+                                                        $(".icon-input-btn").each(function(){
+                                                        var btnFont = $(this).find(".btn").css("font-size");
+                                                        var btnColor = $(this).find(".btn").css("color");
+                                                        $(this).find(".glyphicon").css("font-size", btnFont);
+                                                        $(this).find(".glyphicon").css("color", btnColor);
+                                                        if($(this).find(".btn-xs").length){
+                                                        $(this).find(".glyphicon").css("top", "24%");
+                                                        }
+                                                        });
+                                                        });
+                                                        </script>
+
+                                    {%endif%}
+
+
+                                </p>
+                                    </div>
+                                </div>
+
+                        </form>
+
+                            </div>
+
+
+
+                        <div class="card-body ">
+                                <h5 class="card-title">{{ object.title }}</h5>
+
+                                <div class="date text-right">
+
+                                </div>
+
+                                <p class="card-text" align="center"> {{ object.body|linebreaks }}</p>
+                        </div>
+
+                        <div class="py-4 text-center">
+                            <a href="{% url 'post-list-filter' %}">Blog Listesine Dön</a>
+                        </div>
+
+
+
+                </div>
+            
+	
+{% if user.is_authenticated%}
+                <div id="comments" ></div>
+{%else%}
+
+  <div class="card-body ">
+      <h5 class="card-title"></h5>
+      <div class="card-text text-muted" align="center">
+          *Yorum yapmak için <a href="{% url 'login' %}">giriş</a> yapmanız gerekmektedir.
+      </div>
+      
+  </div>
+<div id="not_member">
+    {% get_comment_count for object as comment_count %}
+<div class="py-4 text-center">
+  <a href="{% url 'post-list-filter' %}">Back to the post list</a>
+  &nbsp;&sdot;&nbsp;
+  {{ comment_count }} comment{{ comment_count|pluralize }}
+  ha{{ comment_count|pluralize:"s,ve"}} been posted.
+</div>
+
+
+
+{% if comment_count %}
+<ul class="media-list">
+  {% render_xtdcomment_tree for object %}
+</ul>
+{% endif %}
+   
+       <script>
+ window.comments_props = {% get_commentbox_props for object %};
+ window.comments_props_override = {
+     allow_comments: {%if object.allow_comments%}true{%else%}false{%endif%},
+     allow_feedback: false,
+     show_feedback: false,
+     allow_flagging: false,
+     allow_reply: false;
+     polling_interval: 500  // In milliseconds.
+ };
+</script>
+
+</div>
+            {%endif%}
+
+        
+        
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block extra-js %}
+<script>
+ window.comments_props = {% get_commentbox_props for object %};
+ window.comments_props_override = {
+     allow_comments: {%if object.allow_comments%}true{%else%}false{%endif%},
+     allow_feedback: true,
+     show_feedback: true,
+     allow_flagging: true,
+     polling_interval: 500  // In milliseconds.
+ };
+</script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  crossorigin="anonymous"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+  integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+  crossorigin="anonymous"></script>
+<script
+  src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+  integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+  crossorigin="anonymous"></script>
+<script
+  type="text/javascript"
+  src="{% url 'javascript-catalog' %}"></script>
+<script src="{% static 'django_comments_xtd/js/vendor~plugin-2.4.0.js' %}"></script>
+<script src="{% static 'django_comments_xtd/js/plugin-2.4.0.js' %}"></script>
+<script>
+$(function() {
+  $('[data-toggle="tooltip"]').tooltip({html: true});
+});
+</script>
+{% endblock %}
+

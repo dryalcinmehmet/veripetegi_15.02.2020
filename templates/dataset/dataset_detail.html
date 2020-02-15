@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+<div class="container"  >
+
+             <div class="row">
+      <div class="col-lg-12">
+      <img src="{% static 'img/blog-banner.jpg' %}" style="width:100%;">
+      </div>
+  </div>
+
+            <div class="row">
+                <div class="col">
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+				<li class="breadcrumb-item active"><a href="{% url 'dataset-list' %}">Depo</a></li>
+                <li class="breadcrumb-item active">Veriseti Detay</li>
+                </ol>
+                </div>
+            </div>
+
+
+            <div class="row" >
+                <div class="col" style="margin: 20px auto;">
+
+ {% for file in document_list %}
+    <span class="badge badge-info">{{file.category}}</span>
+{%endfor%}
+
+
+                </div>
+            </div>
+
+
+
+
+
+            <div class="row">
+
+
+                        <div class="col">
+                                {% for file in document_list %}
+
+
+
+
+
+                                        <div class="card border-yok mb-3" style="max-width: 100rem;">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                <div class="col" align="left">
+                                                    {{file.dataset_title}}
+                                                </div>
+
+                                                <div class="col" align="right">
+<!--                            <form  id="dataset-detail" action="{% url 'jupyter' %}" method="get" accept-charset="utf-8"> {% csrf_token %}-->
+
+<!-- <input class="form-control mr-sm-2" value="{{file.file_name}}" name="filename" type="hidden">-->
+
+<!--                             <button style="border:none; background-color:#f6f6f6; text-decoration: none;  display: inline-block; outline:none;" data-toggle="tooltip"  data-placement="right" title="" data-original-title="IPython Notebook ile aç." aria-describedby="tooltip910430">-->
+<!--                                 <img style="width: 25px; height:25px;" src="{% static 'img/jupyter.png' %}"></img> </button>-->
+
+<!--                                                        <style>-->
+<!--                                                             .tooltip-inner {  background-color: #6610f2;}-->
+<!--                                                        </style>-->
+
+
+<!--</form>-->
+
+
+
+<!--                                                    <a  id="btnSubmit" href="#" style="outline: none;">-->
+<!--                                                        <img style="height: 25px; width: 25px; display: block; align: right;" src="{% static 'img/view.jpeg' %}" alt="Card image">-->
+<!--                                                    </a>-->
+
+<!--                                                    <div id="myAlert" class="alert alert-info collapse">-->
+<!--                                                        <a href="#" class="close" data-dismiss="alert">&times;</a>-->
+<!--                                                        <strong>İncelemek için yetkili değilsiniz!</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--                                                    </div>-->
+
+<!--                                                      <script type="text/javascript">-->
+<!--                                                        $(document).ready(function () {-->
+
+<!--                                                            $('#btnSubmit').click(function () {-->
+<!--                                                                $('#myAlert').show('fade');-->
+
+<!--                                                                setTimeout(function () {-->
+<!--                                                                    $('#myAlert').hide('fade');-->
+<!--                                                                }, 2000);-->
+
+<!--                                                            });-->
+
+<!--                                                            $('#linkClose').click(function () {-->
+<!--                                                                $('#myAlert').hide('fade');-->
+<!--                                                            });-->
+
+<!--                                                        });-->
+<!--                                                    </script>-->
+
+                                                </div>
+                                                </div>
+                                            </div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title"></h5>
+                                                    <p class="card-text"></p>
+
+                                                    <div class="row" style="margin-bottom:20px;">
+                                                        <div class="col">
+
+
+                                                            <div class="card border-yok text-info mb-3" style="max-width: 100rem;">
+                                                            <div class="card-header" align="center"><small>Paylaşım Tarihi</small></div>
+                                                            <div class="card-body text-info">
+                                                            <h5 class="card-title">
+                                                            <p class="card-text" align="center">{{ file.publish_date }}</p></h5>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+
+
+                                                            <div class="col">
+                                                            <div class="card border-yok text-info mb-3" style="max-width: 100rem;">
+                                                            <div class="card-header" align="center"><small>Ekleyen</small></div>
+                                                            <div class="card-body text-info">
+                                                            <h5 class="card-title">
+                                                            <p class="card-text" align="center">{{ file.publisher }}</p></h5>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+
+                                                            <div class="col">
+                                                            <div class="card border-yok text-info mb-3" style="max-width: 100rem;">
+                                                            <div class="card-header" align="center"><small>Kategori</small></div>
+                                                            <div class="card-body text-info" >
+                                                            <h5 class="card-title">
+                                                            <p class="card-text" align="center">{{ file.category }}</p></h5>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+
+                                                            <div class="col">
+                                                            <div class="card border-yok text-info mb-3" style="max-width: 100rem;">
+                                                            <div class="card-header" align="center"><small>İndir</small></div>
+                                                            <div class="card-body text-info"  style="margin: 0px auto; padding: 0px;" >
+                                                            <h5 class="card-title"></h5>
+                                                            <p class="card-text" align="center">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        {{ file.file_name | truncatewords:"15"|linebreaks }}
+                                                                    </div>
+                                                                    <div class="col">
+                                                                          <a href="{% get_media_prefix %}/documents/{{ file.file_name }}" style="outline: none;">
+                                                            <img style="height: 25px; width: 25px; display: block; " src="{% static 'img/csv.jpg' %}" alt="Card image">
+                                                            </a>
+                                                                    </div>
+                                                                </div>
+
+
+                                                            </p>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+
+                                                    <div class="datatable">
+
+                                                            <script>
+                                                            var ext = '{{file.file_name}}'.split('.').slice(0, -1).join('.');
+                                                            </script>
+
+                                                            <script>
+                                                            $.noConflict();
+                                                            jQuery( document ).ready(function( $ ) {
+                                                            $('table.dataframe').DataTable( {
+                                                                    "scrollX": true,
+                                                                     "pageLength": 100,
+                                                                      "lengthMenu": [ 10, 25, 50, 75, 100, 500, 1000, 5000, 100000, 1000000 ]
+                                                                });
+                                                            });
+                                                            </script>
+
+                                                            <style>
+                                                            .dataframe thead{
+                                                            color: #75CAEB;
+                                                            border: 1px solid black;
+                                                            }
+                                                            </style>
+
+                                                            <script src="http://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+                                                            <small>{{data_html | safe }}</small>
+
+                                                    </div>
+
+
+
+
+
+                                            </div>
+                                        </div>
+                                {% endfor %}
+                        </div>
+            </div>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %}

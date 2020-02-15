@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+
+<div class="row">
+<div class="col">
+<img style="margin: 0px auto; width: 100%;" src="{% static 'img/blog-banner.jpg' %}"></img>
+</div>
+</div>
+
+
+<div class="row">
+<div class="col">
+<ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+<li class="breadcrumb-item active"><a href="{% url 'send-question' %}">Yeni Sorun</a></li>
+</ol>
+</div>
+</div>
+
+
+{%if edit == True%}
+<div class="card border-info text-info mb-3" style="max-width: 100rem;">
+<div class="card-header" align="center">Sorunu Düzenle</div>
+<div class="card-body text-info">
+<h5 class="card-title"></h5>
+
+
+
+<form method="post" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{{object.id}}">
+<input type="hidden" name="edit_or_save" value="edit">
+{% csrf_token %}
+
+
+
+<fieldset>
+
+
+<div class="form-group">
+
+
+
+</div>
+
+<div class="form-group">
+<label for="id_title"></label>
+<input type="text" name="title" class="form-control" id="id_title"  placeholder="Başlık" required value="{{object.title}}">
+<small  class="form-text text-muted">Sorununuz için bir başlık giriniz.</small>
+</div>
+
+
+
+
+<div class="form-group">
+<label  for="id_body"></label>
+<textarea class="form-control" name="body" id="id_body" rows="3" placeholder="Sorun" required >{{object.body}}</textarea>
+</div>
+
+
+
+<div class="form-check">
+<label class="form-check-label">
+<input class="form-check-input" type="checkbox" name="fixed" value="True" checked="">
+Çözüldü olarak işaretle.
+</label>
+</div>
+
+</fieldset>
+<div style="margin: 10px auto;" align="center">
+<button type="submit" class="save btn btn-warning">Kaydet</button>
+<button  class="save btn btn-warning" onclick="window.history.back()">Vazgeç</button>
+</div>
+
+
+</form>
+
+</div>
+</div>
+{%elif delete == True%}
+<div class="card border-yok  mb-3" style="max-width: 100rem;">
+<div class="card-header" align="center">Soruyu Sil?</div>
+<div class="card-body ">
+<h5 class="card-title"></h5>
+
+
+
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+
+
+<fieldset>
+
+
+<div class="form-group">
+
+
+
+</div>
+
+<div class="form-group" align="center">
+
+
+<h6  class="form-text text-dark text-width-bold">
+<font class="h5 font-style-italic">"{{object.title}}"</font> başlıklı soruyu silmek istediğinize emin misiniz?
+</h6>
+<small  class="form-text text-muted">*Bu işlem geri alınamaz.</small>
+
+
+</div>
+
+
+
+
+</fieldset>
+
+<div style="margin: 10px auto;" align="center">
+<button type="submit" class="save btn btn-danger" style=" text-transform: none;">Sil</button>
+<button type="button" class="save btn btn-secondary" style=" text-transform: none;" onclick="return window.history.back()">Vazgeç</button>
+
+<!--catch form.is_valid=False error-->
+<input type="hidden" name="title" value="bu alan required olduğu için gönderiyoruz.">
+<input type="hidden" name="body" value="bu alan required olduğu için gönderiyoruz.">
+<!---->
+<input type="hidden" name="edit_or_save" value="delete">
+<input type="hidden" name="id" value="{{object.id}}">
+</div>
+
+</form>
+
+</div>
+</div>
+{%elif delete_info == True %}
+<div class="card border-yok  mb-3" style="max-width: 100rem;">
+<div class="card-header" align="center">Bilgi</div>
+<div class="card-body ">
+<h5 class="card-title"></h5>
+
+
+
+
+<fieldset>
+
+
+<div class="form-group">
+
+
+
+</div>
+
+<div class="form-group" align="center">
+
+
+<h6  class="form-text text-width-bold">
+<font class="h5 font-italic">"{{title}}"</font> başlıklı soru başarıyla silindi. Soru listesine dönmek için
+<a href="{%url 'q&a-list' %}">tıklayın</a>.
+</h6>
+<small  class="form-text text-muted">*Soru {{author}} tarafından silindi.</small>
+
+
+</div>
+
+
+
+
+</fieldset>
+
+
+
+
+</div>
+</div>
+{%else%}
+<div class="card border-info text-info mb-3" style="max-width: 100rem;">
+<div class="card-header" align="center">Yeni Sorun Ekle</div>
+<div class="card-body text-info">
+<h5 class="card-title"></h5>
+
+
+
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+
+
+<fieldset>
+
+
+<div class="form-group">
+
+
+
+</div>
+
+<div class="form-group">
+<label for="id_title"></label>
+<input type="text" name="title" class="form-control" id="id_title"  placeholder="Başlık">
+<small  class="form-text text-muted">Sorununuz için bir başlık giriniz.</small>
+</div>
+
+
+
+
+<div class="form-group">
+<label  for="id_body"></label>
+<textarea class="form-control" name="body" id="id_body" rows="3" placeholder="Sorun"></textarea>
+</div>
+
+
+
+<div class="form-check">
+<label class="form-check-label">
+<input class="form-check-input" type="checkbox" name="fixed" value="True" checked="">
+Çözüldü olarak işaretle.
+</label>
+</div>
+
+</fieldset>
+<div style="margin: 10px auto;" align="center">
+<button type="submit" class="save btn btn-warning">Gönder</button>
+<button  class="save btn btn-warning">Vazgeç</button>
+</div>
+
+</form>
+
+</div>
+</div>
+{%endif%}
+
+
+</div>
+
+{% endblock %}

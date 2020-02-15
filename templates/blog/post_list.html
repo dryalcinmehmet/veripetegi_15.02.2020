@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load comments %}
+{% load comments_xtd %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+
+  <div class="row">
+      <div class="col-lg-12">
+      <img src="{% static 'img/blog-banner.jpg' %}" style="width:100%;">
+      </div>
+  </div>
+    
+    <div class="row">
+       <div class="col">
+      <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+      <li class="breadcrumb-item active"><a href="{% url 'blog:post-list' %}">Blog</a></li>
+    </ol>
+       </div>
+    </div>
+  
+
+   <div class="row" >
+                <div class="col" style="margin: 20px auto;">
+
+                <form method="post">
+                {% csrf_token %}
+                <select class="myselect" multiple="multiple" name="myselect"  style="width: 85%">
+                <option>Futbol</option>
+                <option>Finans</option>
+                <option>Teknoloji</option>
+                </select>
+                <button class="btn btn-info my-2 my-sm-0" type="submit" style="margin-right:0px;width: 14%;">Filtrele</button>
+
+
+                </form>
+
+
+                <script type="text/javascript">
+                $(".myselect").select2();
+                </script>
+
+                </div>
+            </div>
+
+            {%if selected_category%}
+            <small> <p style="color:#FF851B;">Filtre:{%for c in selected_category%}| {{c}} | {%endfor%}</p></small>
+            {%else%}
+            <small> <p style="color:#FF851B;">Filtre: Yok</p></small>
+            {%endif%}
+
+  
+  <div class="row" style="margin-top:20px;">
+    
+    
+    
+    <div class="col-lg-9">
+
+
+<div class="card-header" align="center"><small>Blog Listesi</small></div>
+
+
+			<div class="list-group">
+			 {% for post in object_list %}
+            <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{post.title | truncatewords:"40"}}</h5>
+                    <div class="date">
+                    <small>{{ post.publish }}</small>
+                    </div>
+                </div>
+
+                <div class="post">
+                  <p class="mb-1">{{ post.body | truncatewords:"15"|linebreaks }}</p>
+                </div>
+
+            </a>
+        {% endfor %}
+		</div>
+
+
+
+
+
+
+    </div>
+    
+    
+    <div class="col-lg-3">
+
+    <div class="card-header text-warning" align="center"><small>Son Yorumlar</small></div>
+    {% render_last_xtdcomments 5 for blog.post %}
+    </div>
+
+
+
+    </div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col">
+
+                <ul class="mt-5 pagination justify-content-center">
+        <li class="page-item{% if not page_obj.has_previous %} disabled{% endif %}">
+          <a class="page-link" href="{{ url }}?page={% if page_obj.has_previous %}{{ page_obj.previous_page_number }}{% endif %}">Geri</a>
+        </li>
+        {% for page_number in page_range %}
+        <li class="page-item{% if page_number == page_obj.number %} active{% endif %}">
+          <a class="page-link" href="{{ url }}?page={{ page_number }}">{{ page_number }}</a>
+        </li>
+        {% endfor %}
+        <li class="page-item{% if not page_obj.has_next %} disabled{% endif %}">
+          <a class="page-link" href="{{ url }}?page={% if page_obj.has_next %}{{ page_obj.next_page_number }}{% endif %}">İleri</a>
+        </li>
+      </ul>
+
+    </div>
+
+
+  </div>
+
+
+  
+  
+</div>
+{% endblock %}

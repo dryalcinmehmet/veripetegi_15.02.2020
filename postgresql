@@ -1,0 +1,6 @@
+CREATE DATABASE dataset WITH ENCODING 'UTF-8' LC_COLLATE='tr_TR.UTF-8' LC_CTYPE='tr_TR.UTF-8' TEMPLATE=template0;
+CREATE USER doctor WITH PASSWORD 'doctor99';
+ALTER ROLE doctor SET client_encoding TO 'utf8';
+ALTER ROLE doctor SET default_transaction_isolation TO 'read committed';
+ALTER ROLE doctor SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE dataset TO doctor;

@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+<div class="container"  >
+
+             <div class="row">
+				  <div class="col-lg-12">
+				  <img src="{% static 'img/blog-banner.jpg' %}" style="width:100%;">
+				  </div>
+			  </div>
+
+            <div class="row">
+                <div class="col">
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+                <li class="breadcrumb-item active"><a href="{% url 'dataset-list' %}">Depo</a></li>
+                </ol>
+                </div>
+            </div>
+
+
+            <div class="row" >
+                <div class="col" style="margin: 20px auto;">
+
+                <form method="post">
+                {% csrf_token %}
+                <select class="myselect" multiple="multiple" name="myselect"  style="width: 85%">
+                <option>Futbol</option>
+                <option>Finans</option>
+                <option>Teknoloji</option>
+                </select>
+                <button class="btn btn-info my-2 my-sm-0" type="submit" style=" text-transform: none; margin-right:0px;width: 14%;">Filtrele</button>
+                </form>
+                             {%if selected_category%}
+            {%for c in selected_category%}
+    <span class="badge badge-info">{{c}} </span>
+
+    {%endfor%}
+     <a href="{% url 'dataset-list'%}"><span class="badge badge-danger">Temizle</span></a>
+    {%else%}
+    <span class="badge badge-info">Tüm Kategoriler</span>
+            {%endif%}
+
+
+
+                <script type="text/javascript">
+
+
+                $('.myselect').select2({
+                      tags: "true",
+                       selected:true,
+                      allowClear: true,
+                       maximumSelectionLength: 20,
+
+
+
+});
+
+                </script>
+
+                </div>
+            </div>
+
+
+
+
+             {% if document_list|length > 0 %}
+            <div class="row">
+
+
+                        <div class="col">
+                                {% for file in document_list %}
+
+
+
+                                        <div class="card border-yok mb-3" style="max-width: 100rem;">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                <div class="col" align="left">
+                                                    {{file.dataset_title}}
+                                                </div>
+
+                                                <div class="col" align="right">
+
+
+
+ <form  id="dataset-detail" action="{% url 'dataset-detail' %}" method="get" accept-charset="utf-8"> {% csrf_token %}
+ <input class="form-control mr-sm-2" value="{{file.file_name}}" name="filename" type="hidden">
+
+
+                            <button style="border:none; background-color:#f6f6f6; text-decoration: none;  display: inline-block; outline:none;" data-toggle="tooltip"  data-placement="right" title="" data-original-title="Online incelemek için tıklayınız." aria-describedby="tooltip910430"><img style="width: 25px; height:25px;" src="{% static 'img/view.png' %}"></img> </button>
+
+                                                        <style>
+                                                             .tooltip-inner {  background-color: #6610f2;}
+                                                        </style>
+
+
+</form>
+
+                                                
+
+                                                </div>
+                                                </div>
+                                            </div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title"></h5>
+                                                    <p class="card-text"></p>
+
+                                                    <div class="row" style="margin-bottom:20px;">
+                                                        <div class="col">
+
+
+                                                            <div class="card border-yok mb-3" style="max-width: 100rem;">
+                                                            <div class="card-header" align="center"><small>Paylaşım Tarihi</small></div>
+                                                            <div class="card-body ">
+                                                            <h5 class="card-title">
+                                                            <p class="card-text" align="center">{{ file.publish_date }}</p></h5>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+
+
+                                                            <div class="col">
+                                                            <div class="card border-yok  mb-3" style="max-width: 100rem;">
+                                                            <div class="card-header" align="center"><small>Ekleyen</small></div>
+                                                            <div class="card-body ">
+                                                            <h5 class="card-title">
+                                                            <p class="card-text" align="center">{{ file.publisher }}</p></h5>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+
+                                                            <div class="col">
+                                                            <div class="card border-yok  mb-3" style="max-width: 100rem;">
+                                                            <div class="card-header" align="center"><small>Kategori</small></div>
+                                                            <div class="card-body " >
+                                                            <h5 class="card-title">
+                                                            <p class="card-text" align="center">{{ file.category }}</p></h5>
+                                                            </div>
+                                                            </div>
+                                                            </div>
+
+                                                            <div class="col">
+                                                            <div class="card border-yok  mb-3" style="max-width: 100rem;">
+                                                            <div class="card-header" align="center"><small>İndir</small></div>
+                                                            <div class="card-body "  style="margin: 0px auto; padding: 0px;" >
+                                                            <h5 class="card-title"></h5>
+                                                            <p class="card-text" align="center">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        {{ file.file_name | truncatewords:"15"|linebreaks }}
+                                                                    </div>
+                                                                    <div class="col">
+                                                                          <a href="{% get_media_prefix %}/documents/{{ file.file_name }}" style="outline: none;">
+                                                            <img style="height: 25px; width: 25px; display: block; " src="{% static 'img/csv.jpg' %}" alt="Card image">
+                                                            </a>
+                                                                    </div>
+                                                                </div>
+
+
+                                                            </p>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+
+                                                    <div class="datatable">
+
+                                                            <script>
+                                                            var ext = '{{file.file_name}}'.split('.').slice(0, -1).join('.');
+                                                            </script>
+
+                                                            <script>
+                                                            $.noConflict();
+                                                            jQuery( document ).ready(function( $ ) {
+                                                            $('table.dataframe').DataTable();
+                                                            });
+                                                            </script>
+
+                                                            <style>
+                                                            .dataframe thead{
+                                                            color: #75CAEB;
+                                                            border: 1px solid black;
+                                                            }
+                                                            </style>
+
+                                                            <script src="http://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+                                                            <small>{{file.first_5_row | safe }}</small>
+
+                                                    </div>
+
+
+
+
+
+                                            </div>
+                                        </div>
+                                {% endfor %}
+                        </div>
+            </div>
+            {%else%}
+            <div class="row">
+                <div class="col">
+                 <div class="card border-yok  mb-3" style="max-width: 100rem;">
+                <div class="card-header" align="center"><small>Bilgi</small></div>
+                <div class="card-body ">
+                <h5 class="card-title">
+                <p class="card-text" align="center">Malesef arama kelimeniz ile ilişkili veriseti bulunamadı.</p></h5>
+                </div>
+                </div>
+                </div>
+            </div>
+            {%endif%}
+
+
+
+            <div class="card border-yok text-warning mb-3" align="center" style="background-color: #f6f6f6; margin: 10px auto; max-width: 100rem;">
+
+                                                        <div class="card-body text-info" align="center" style="margin: 0px auto;">
+                                                        <h5 class="card-title">
+                                                        <p class="card-text" align="center"></p></h5>
+
+                                                            {% if document_list.has_other_pages %}
+                                                                          <ul class="pagination" style="margin: 0px auto;">
+                                                                            {% if document_list.has_previous %}
+                                                                              <li class="page-item"><a  class="page-link" href="?page={{ document_list.previous_page_number }}">&laquo;</a></li>
+                                                                            {% else %}
+                                                                              <li class="page-item disabled"><a  class="page-link" href="#">&laquo;</a></li>
+                                                                            {% endif %}
+                                                                            {% for i in document_list.paginator.page_range %}
+                                                                              {% if document_list.number == i %}
+                                                                              <li class="page-item active"><a  class="page-link" href="?page={{ i }}">{{ i }} </a> </li>
+                                                                              {% else %}
+                                                                                <li class="page-item"><a  class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                                                              {% endif %}
+                                                                            {% endfor %}
+                                                                            {% if document_list.has_next %}
+                                                                              <li class="page-item"><a  class="page-link" href="?page={{ document_list.next_page_number }}">&raquo;</a></li>
+                                                                            {% else %}
+                                                                              <li class="page-item disabled"><a  class="page-link" href="#">&laquo;</a></li>
+                                                                            {% endif %}
+                                                                          </ul>
+                                                                        {% endif %}
+
+                                                        </div>
+            </div>
+</div>
+
+
+</div>
+
+
+
+{% endblock %}

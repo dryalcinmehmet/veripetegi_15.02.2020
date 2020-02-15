@@ -1,0 +1,167 @@
+{% load staticfiles %}
+{% load auth_extras %}
+{% load custom_filters %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between" style="border: 1px;">
+  <a class="navbar-brand" href="#"><button class="btn btn-warning">Veri Peteği</button></a>
+  
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor03" >
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'homepage' %}">Anasayfa <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'post-list-filter' %}">Blog</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'dataset-list' %}">Depo</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'q&a-list'%}">Soru&Cevap</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Atölye</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'add-dataset' %}">Veriseti Yükle</a>
+      </li>
+     <li class="nav-item">
+        <a class="nav-link" href="{% url 'jupyter' %}">Jupyter</a>
+      </li>
+
+      
+      
+    </ul>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <ul class="nav navbar-nav navbar-right" style="padding-left: 5px;">
+      
+    
+  
+          {% if user.is_authenticated %}
+           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">{{user.username}}</a>
+           <div class="dropdown-menu dropdown-menu-right" >
+
+          
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+                  <div class="card-body" style="width: 250px;">
+                          <h5 class="card-header">Profil Bilgileri</h5>
+                          
+                          <ul class="list-group list-group-flush">
+                          
+                          <li class="list-group-item">
+                          <p align="center"><img width="50px" height="50px" src="{% get_profile user.username as profile %}{{profile.avatar}}" /></p>
+                          <p align="center">Hoşgeldiniz! {%if user.first_name%} <br>
+                          {{user.first_name}}
+                          {{user.last_name}}
+                          {%else%}
+
+                          {{user.username}} <br>
+                           {{profile.first_name}}
+                          {{profile.last_name}}
+                          {%endif%}
+                          </p></li>
+                          
+                          
+                         
+                          
+                          </ul>
+                          
+                         <div class="list-group" style="margin: 5px auto;">
+ 
+
+                        <a href="{% url 'profile' %} " class="list-group-item list-group-item-action">Profil</a>
+                             <a href="{% url 'password_change' %} " class="list-group-item list-group-item-action">Parola Değiştir</a>
+                        {% if request.user|has_group:"Yazar" %}
+   <a href="{% url 'add-post'%}" class="list-group-item list-group-item-action">Blog Yaz </a>
+                             {%else%}
+                              <a  class="list-group-item list-group-item-action" data-toggle="tooltip" data-placement="left" title="" data-original-title="Blog yazabilmek için yazar olmanız gerekmektedir!" aria-describedby="tooltip910430">Blog Yaz
+                        </a>
+{% endif %}
+
+
+
+
+                        <a href="{% url 'logout' %} " class="list-group-item list-group-item-action">Çıkış yapmak için tıklayın</a>
+                        </div>
+                          
+                          
+             
+                
+        
+                          
+                          
+                     
+                          
+                    
+                          <div class="card-footer text-muted">
+                          <p>Son Giriş: {{user.last_login}}</p>
+                          </div>
+                    
+                    
+                  
+                    
+                    
+                  </div>
+             
+          </div>
+         {%else%}
+         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Giriş Yap</a>
+       <div class="dropdown-menu dropdown-menu-right">
+
+          <h6 class="card-header" align="center">Giriş Yapılmadı!</h6>
+
+          <div class="card-body" align="center">
+
+           <a href="{% url 'login'%}"><button type="submit" class="btn btn-info">Giriş Yap</button></a>
+          </div>
+          
+
+
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url 'signup' %}">Üye Olmak İçin Tıkla</a>
+          <a class="dropdown-item" href="{% url 'password_reset' %}">Parolamı Unuttum?</a>
+
+         </div>
+         
+         {%endif%}
+       
+
+       </li>
+      
+      
+    </ul>
+  </ul>
+  
+
+
+</nav>

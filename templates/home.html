@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+ <div class="container" style="background-color: #f6f6f6;">
+      
+      <div class="row my-4">
+        <div class="col-lg-12">
+	      <h5 class="text-center">Açık Kaynak Veriseti Deposu</h5>
+          <hr/>
+        </div>
+      </div>
+   
+
+<div  id="row">
+    <div class="col" style="text-align: center; margin: 0px auto;">
+		
+        <p><font size="6"></font></p>
+        <p><font size="3">Global verisetlerine ücretsiz erişim(home (commit "Version 1.1"))</font></p>
+		<p><font size="3">Veriseti Ara</font></p>
+	
+	</div>
+</div>
+
+
+
+
+		<div class="row">
+
+
+
+			<div class="col-lg-12">
+				<div class="active-cyan-3 active-cyan-4 mb-4" >
+			
+					 <form class="form-inline my-2 my-lg-0" id="searchform" action="{% url 'search' %}" method="get" accept-charset="utf-8"> {% csrf_token %}
+					  <input class="form-control mr-sm-2" name="q" type="text" placeholder="Anahtar kelime girin.." style="width:85%;">
+					  <button class="btn btn-info my-2 my-sm-0" type="submit" style="margin-left:0px;width: 14%;">Ara</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+<div class="row" >
+	<div class="col-lg-8">
+		<iframe src="http://www.youtube.com/embed/2ePf9rue1Ao?html5=1" width="100%" height="100%"></iframe>
+
+	</div>
+
+	<div class="col-lg-4">
+
+<div class="row justify-content-center flex-fill">
+  <div class="col-md-10">
+    <p class="lead" align="justify">  <code>3000</code>'den fazla veriseti barındıran Türkiye'nin en geniş çaplı bilgi paylaşım platformu olan Veri Peteği'nde <code>yazar</code> olmak istermisiniz?  </p>
+	  <p class="my-3 text-center"><a href="{% url 'author-apply' %}">Yazar olmak istiyorum!</a></p>
+  </div>
+</div>
+
+
+	</div>
+
+</div>
+
+
+
+
+<div class="row">
+		
+	
+
+		<div class="col-lg-6" style="margin: 20px auto;">
+            <div class="card-header text-muted">Son Eklenen Bloglar</div>
+			<div class="list-group" style="max-height: 600px;overflow: auto;">
+			 {% for post in object_list %}
+            <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <p style="padding-top:5px; font-size:12px;" class="mb-2 font-weight-bold h6" align="left">{{post.title|truncatewords:"5"}}</p>
+                    <div class="date">
+                        <span class="badge badge-warning">blog </span>
+                    <small class="font-italic font-weight-bold" style="font-size:10px;">{{ post.publish }}</small>
+
+                    </div>
+                </div>
+
+                <div class="post">
+                  <p class="mb-1" >{{ post.body | truncatewords:"25"|linebreaks }}</p>
+                </div>
+
+            </a>
+        {% endfor %}
+		</div>
+        </div>
+
+
+
+		
+
+
+
+		<div class="col-lg-6" style="margin: 20px auto;">
+			<div class="card-header text-muted">Son Eklenen Sorular</div>
+			<div class="list-group" style="max-height: 600px;overflow: auto;">
+			 {% for qa in questions %}
+            <a href="{%url 'dataset-list' %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                     <p style="padding-top:5px; font-size:12px;" class="mb-2 font-weight-bold h6" align="left">{{qa.title|truncatewords:"5"}}</p>
+
+                    <div class="date">
+
+                    <small class="font-italic font-weight-bold" style="font-size:10px;">{{ qa.publish }}</small>
+                    </div>
+                </div>
+
+                <div class="post">
+                  <p class="mb-1">{{ qa.body | truncatewords:"25"|linebreaks }}</p>
+                </div>
+
+            </a>
+        {% endfor %}
+		</div>
+		</div>
+
+
+  
+</div>
+
+
+
+
+<div class="row">
+
+
+
+
+
+		<div class="col-lg-4" style="margin: 20px auto;">
+            <div class="card-header">Son Eklenen Verisetleri</div>
+
+
+			<div class="list-group" style="max-height: 600px;overflow: auto;">
+			 {% for file in document_list %}
+            <a href="{%url 'dataset-list' %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <p style="padding-top:5px; font-size:12px;" class="mb-2 font-weight-bold h6">{{file.dataset_title | truncatewords:"10"}}</p>
+
+                    <div class="date">
+
+                    <small  class="font-italic font-weight-bold" style="font-size:10px;">{{ file.publish_date }}</small>
+                    </div>
+                </div>
+  <small>{{ file.publisher }}</small>
+                <div class="post">
+                  <p class="mb-1" style="font-size:10px;">{{ post.file_name | truncatewords:"15"|linebreaks }}</p>
+                </div>
+
+            </a>
+        {% endfor %}
+		</div>
+		</div>
+
+
+		<div class="col-lg-4" style="margin: 20px auto;">
+            <div class="card-header">Son Eklenen Verisetleri</div>
+
+
+			<div class="list-group" style="max-height: 600px;overflow: auto;">
+			 {% for file in document_list %}
+            <a href="{%url 'dataset-list' %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">{{file.dataset_title | truncatewords:"10"}}</h6>
+
+                    <div class="date">
+                        <span class="badge badge-info">veriseti</span>
+                    <small>{{ file.publish_date }}</small>
+                    </div>
+                </div>
+  <small>{{ file.publisher }}</small>
+                <div class="post">
+                  <p class="mb-1">{{ post.file_name | truncatewords:"15"|linebreaks }}</p>
+                </div>
+
+            </a>
+        {% endfor %}
+		</div>
+		</div>
+
+
+		<div class="col-lg-4" style="margin: 20px auto;">
+            <div class="card-header">Son Eklenen Verisetleri</div>
+
+
+			<div class="list-group" style="max-height: 600px;overflow: auto;">
+			 {% for file in document_list %}
+            <a href="{%url 'dataset-list' %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">{{file.dataset_title | truncatewords:"10"}}</h6>
+
+                    <div class="date">
+                        <span class="badge badge-info">veriseti</span>
+                    <small>{{ file.publish_date }}</small>
+                    </div>
+                </div>
+  <small>{{ file.publisher }}</small>
+                <div class="post">
+                  <p class="mb-1">{{ post.file_name | truncatewords:"15"|linebreaks }}</p>
+                </div>
+
+            </a>
+        {% endfor %}
+		</div>
+		</div>
+
+
+</div>
+
+<div class="card mb-3">
+  <h6 class="card-header text-info">Güncel Fuar</h6>
+  <div class="card-body">
+    <h5 class="card-title">38. Uluslarası İstanbul Kitap Fuarı </h5>
+    <h6 class="card-subtitle text-muted">Tüyap</h6>
+  </div>
+  <img style="height: 200px; width: 100%; display: block;" src="{% static 'img/news/kitap-fuari.jpg' %}" alt="Card image">
+  <div class="card-body">
+    <p class="card-text">Her yıl yarım milyon ziyaretçiye ulaşan Uluslararası İstanbul Kitap Fuarı, 2-10 Kasım 2019 tarihleri arasında okurları, yurt içi ve yurt dışından pek çok değerli yazarla buluşturacak. Uluslararası Salon, fuarın ilk dört günü boyunca açık olacak (2-5 Kasım 2019).</p>
+  </div>
+
+
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item text-info">Tarih<h6 class="card-subtitle text-muted" style="margin:5px auto;">02 - 10 Kasım 2019</h6></li>
+     <li class="list-group-item text-info">Yer<h6 class="card-subtitle text-muted" style="margin:5px auto;">Tüyap Fuar ve Kongre Merkezi - Büyükçekmece / İSTANBUL</h6></li>
+  </ul>
+  <div class="card-body">
+    <a href="#" class="card-link">Duyuru Sayfası</a>
+    <a href="#" class="card-link">Fuar Sayfası</a>
+  </div>
+  <div class="card-footer text-muted">
+    2 days ago
+  </div>
+</div>
+		
+	</div>
+
+
+	<div class="col">
+
+<div class="card mb-3">
+  <h3 class="card-header">Etkinlik</h3>
+  <div class="card-body">
+    <h5 class="card-title">38. Uluslarası İstanbul Kitap Fuarı </h5>
+    <h6 class="card-subtitle text-muted">Tüyap</h6>
+  </div>
+  <img style="height: 200px; width: 100%; display: block;" src="{% static 'img/news/kitap-fuari.jpg' %}" alt="Card image">
+  <div class="card-body">
+    <p class="card-text">Her yıl yarım milyon ziyaretçiye ulaşan Uluslararası İstanbul Kitap Fuarı, 2-10 Kasım 2019 tarihleri arasında okurları, yurt içi ve yurt dışından pek çok değerli yazarla buluşturacak. Uluslararası Salon, fuarın ilk dört günü boyunca açık olacak (2-5 Kasım 2019).</p>
+  </div>
+
+
+
+
+
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">TARİH<h6 class="card-subtitle text-muted">02 - 10 Kasım 2019</h6></li>
+     <li class="list-group-item">ZİYARET SAATLERİ<h6 class="card-subtitle text-muted">Hafta sonu : 10.00-20.00
+Hafta içi : 10.00-19.00
+(*10 Kasım : 10.00-19.00)</h6></li>
+     <li class="list-group-item">YER<h6 class="card-subtitle text-muted">Tüyap Fuar ve Kongre Merkezi - Büyükçekmece / İSTANBUL</h6></li>
+  </ul>
+  <div class="card-body">
+    <a href="#" class="card-link">Duyuru Sayfası</a>
+    <a href="#" class="card-link">Fuar Sayfası</a>
+  </div>
+  <div class="card-footer text-muted">
+    2 days ago
+  </div>
+</div>
+
+	</div>
+
+	<div class="col">
+
+<div class="card mb-3">
+  <h3 class="card-header">Güncel Fuar</h3>
+  <div class="card-body">
+    <h5 class="card-title">38. Uluslarası İstanbul Kitap Fuarı </h5>
+    <h6 class="card-subtitle text-muted">Tüyap</h6>
+  </div>
+  <img style="height: 200px; width: 100%; display: block;" src="{% static 'img/news/kitap-fuari.jpg' %}" alt="Card image">
+  <div class="card-body">
+    <p class="card-text">Her yıl yarım milyon ziyaretçiye ulaşan Uluslararası İstanbul Kitap Fuarı, 2-10 Kasım 2019 tarihleri arasında okurları, yurt içi ve yurt dışından pek çok değerli yazarla buluşturacak. Uluslararası Salon, fuarın ilk dört günü boyunca açık olacak (2-5 Kasım 2019).</p>
+  </div>
+
+
+
+
+
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Tarih<h6 class="card-subtitle text-muted">02 - 10 Kasım 2019</h6></li>
+     <li class="list-group-item">Ziyaret Saatleri<h6 class="card-subtitle text-muted">Hafta sonu : 10.00-20.00
+Hafta içi : 10.00-19.00
+(*10 Kasım : 10.00-19.00)</h6></li>
+     <li class="list-group-item">Yer<h6 class="card-subtitle text-muted">Tüyap Fuar ve Kongre Merkezi - Büyükçekmece / İSTANBUL</h6></li>
+  </ul>
+  <div class="card-body">
+    <a href="#" class="card-link">Duyuru Sayfası</a>
+    <a href="#" class="card-link">Fuar Sayfası</a>
+  </div>
+  <div class="card-footer text-muted">
+    2 days ago
+  </div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

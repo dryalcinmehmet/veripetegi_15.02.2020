@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+<div class="container" >
+
+
+    <div class="row">
+      <div class="col-lg-12">
+      <img src="{% static 'img/blog-banner.jpg' %}" style="width:100%;">
+      </div>
+  </div>
+
+    <div class="row">
+        <div class="col">
+{%if not author_apply%}
+
+            {% if not approve_wait%}
+            <div class="card border-ligth text-info mb-3" style="max-width: 100rem; margin:10px auto;">
+        <div class="card-header" align="center">Yazar Başvurusu</div>
+        <div class="card-body text-info">
+
+
+        <form method="POST" class="post-form">{% csrf_token %}
+
+
+
+
+        <fieldset>
+
+        <div class="form-group">
+        <label for="id_name" class="text-muted h6">İsim</label>
+
+        <input type="text" name="name" class="form-control" id="id_name"  placeholder="İsim" value="{{object.first_name}}" required>
+
+        </div>
+
+
+        <div class="form-group">
+        <label for="id_surname" class="text-muted h6">Soyisim</label>
+        <input type="text" name="surname" class="form-control" id="id_surname"  placeholder="Soyisim"  value="{{object.last_name}}" required>
+
+        </div>
+
+
+        <div class="form-group">
+        <label for="id_job" class="text-muted h6">Meslek</label>
+        <input type="text" name="job" class="form-control" id="id_job"  placeholder="Meslek"  value="{{object.job}}" required>
+
+        </div>
+
+
+        <div class="form-group" >
+        <label for="id_job_talents" class="text-muted h6">Yetenekler</label>
+        <input type="text" name="job_talents" class="form-control" id="id_job_talents"  placeholder="Yetenekler, bilgi birikimi veya ilgi alanlarınız.."  value="{{object.talents}}" required>
+        <small  class="form-text text-muted">Bu alanı anahtar kelimeler şeklinde doldurunuz.</small>
+        <small class="form-text text-muted">-Yazılımcı iseniz "C++","Python", "Html" gibi</small>
+        <small class="form-text text-muted">-Tarihçi iseniz "Osmanlı Tarihi","Roma Tarihi", "Kronoloji" gibi</small>
+        <small class="form-text text-muted">-Biyolog iseniz "Histoloji","Botanik", "Hücre Bilimi" gibi</small>
+        </div>
+
+
+        <div class="form-group">
+            <select class="custom-select" name="uni" id="id_uni"  required>
+            <option value="" selected>Üniversite Seçiniz</option>
+            <option value="İtü">İtü</option>
+            <option value="Ytü">Ytü</option>
+            <option value="Erciyes">Erciyes</option>
+        </select>
+          </div>
+
+        <div class="form-group">
+            <select class="custom-select" name="rustudent" id="id_rustudent"  value="{{object.rustudent}}" required>
+            <option value="" selected>Çalışma Durumu</option>
+            <option value="Öğrenci">Öğrenci</option>
+            <option value="Mezun">Mezun</option>
+
+        </select>
+          </div>
+
+
+
+
+
+        <div class="form-group">
+        <label  for="id_text"></label>
+        <textarea class="form-control" name="text" id="id_text" rows="3" placeholder="Kendinizi kısaca tanıtınız.." required></textarea>
+        <small class="form-text text-muted">Bu alanda -hangi konularda- blog yazabileceğinizi, -ne sıklıkta- paylaşım yapabileceğinizi belirtmeniz gerekmektedir.</small>
+        <small class="form-text text-muted">Belirteceğiniz konular makale kategorilerinde yok ise başvurudan sonra otomatik eklenecektir.</small>
+        <small class="form-text text-muted">Yazar olmak için herhangi bir yeteneğe sahip olmanız gerekmemektedir. Önemli olan içinizde yazma isteğinin olması ve insanlara faydalı
+        olabilecek paylaşımlar yapabilmenizdir. Sonuçta her insanın yetenekli olduğu alanlar vardır :)</small>
+        </div>
+
+
+
+        <div class="form-check">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" name="allow_comments" value="True" checked="" required>
+        Yazar olma kurallarını okudum.
+        </label>
+        </div>
+
+        </fieldset>
+
+        <div style="margin: 10px auto;" align="center">
+        <button type="submit" class="save btn btn-warning">Gönder</button>
+        <button type="" class="save btn btn-warning">Vazgeç</button>
+        </div>
+
+        </form>
+
+        </div>
+        </div>
+            {%else%}
+            <div class="card border-ligth  mb-3" style="max-width: 100rem; margin:10px auto;">
+        <div class="card-header" align="center">Yazar Başvurusu</div>
+        <div class="card-body " align="center">
+            Başvurunuz bize ulaştı. En kısa zamanda mail yolu ile bilgilendirileceksiniz. Profilinize gitmek için <a href="{% url 'profile'%}">tıklayın</a>.
+        </div>
+            </div>
+            {%endif%}
+{%else%}
+                <div class="card border-ligth  mb-3" style="max-width: 100rem; margin:10px auto;">
+        <div class="card-header" align="center">Yazar Başvurusu</div>
+        <div class="card-body " align="center">
+            {{author_apply.apply_date}} tarihinde başvurunuz alınmıştır. En kısa zamanda mail yolu ile size dönüş sağlanacaktır. Profilinize gitmek için <a href="{% url 'profile'%}">tıklayın</a>.
+        </div>
+            </div>
+{%endif%}
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock%}

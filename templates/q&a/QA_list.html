@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+<div class="container"  >
+
+             <div class="row">
+      <div class="col-lg-12">
+      <img src="{% static 'img/blog-banner.jpg' %}" style="width:100%;">
+      </div>
+  </div>
+
+            <div class="row">
+                <div class="col">
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+                <li class="breadcrumb-item active"><a href="{% url 'q&a-list' %}">Soru&Cevap</a></li>
+                </ol>
+                </div>
+            </div>
+
+
+    <div class="row">
+        <div class="col">
+
+
+             <div class="card border-yok" style="max-width: 100rem; ">
+            
+        <div class="card-header bg-secondary text-muted" >
+            <div class="row" style="padding-left:0px; padding-right:0px; padding-bottom: 0px; padding-top: 0px;  margin:0px auto;">
+           <div class="col" style="padding-left:0px; padding-right:0px; padding-bottom: 0px; padding-top: 15px;   margin:0px auto;" align="left">
+              Mevcut soru sayısı:&nbsp;&nbsp;{{object_list|length}}
+           </div>
+           <div class="col h6" style="padding-left:0px; padding-right:0px; padding-bottom: 0px; padding-top: 15px;  margin:0px auto;" align="center">
+               Soru & Cevap
+           </div>
+                {% if user.is_authenticated%}
+            <div    class="col" style="padding-left:0px; padding-right:0px; padding-bottom: 0px; padding-top: 15px;   margin:0px auto;" align="right">
+                
+            
+            
+                
+                <a href="{% url 'send-question' %}"> <span data-toggle="tooltip"  data-placement="right" title="" data-original-title="Yeni soru yazmak için tıklayınız." aria-describedby="tooltip910430" class="glyphicon glyphicon-plus text-warning"></span></a></p>
+                <style>
+                
+                    .glyphicon.glyphicon-plus {
+                            font-size: 25px;
+
+                        }
+                        
+                       .tooltip-inner {  background-color: #6610f2;}
+                </style>
+            </div>
+                {%else%}
+           <div    class="col" style="padding-left:0px; padding-right:0px; padding-bottom: 0px; padding-top: 15px;   margin:0px auto;" align="right">
+                
+            
+            
+                
+                <a> <span data-toggle="tooltip"  data-placement="right" title="" data-original-title="Yeni soru göndermek için giriş yapmanız gerekmektedir." aria-describedby="tooltip910430" class="glyphicon glyphicon-plus text-warning"></span></a></p>
+                <style>
+                
+                    .glyphicon.glyphicon-plus {
+                            font-size: 25px;
+
+                        }
+                        
+                       .tooltip-inner {  background-color: #6610f2;}
+                </style>
+            </div>
+                {%endif%}
+                
+            </div>
+
+
+
+
+        </div>
+             </div>
+        
+ <div class="row" style="padding-top:15px;">
+<div class="col">
+                     {% for qa in object_list %}
+                             <form class="form-inline my-2 my-lg-0" id="qa-detail" action="{% url 'qa-detail' %}" method="get" accept-charset="utf-8"> {% csrf_token %}
+
+                                       <div class="card border-yok  mb-3" style="width: 100rem;">
+
+                                                                                            <div class="card-body text-dark">
+                                                                                            <div class="d-flex w-100 justify-content-between">
+                                <button type="submit"  class="btn-link"> <h5 class="mb-1">{{qa.title | truncatewords:"40"}}</h5> </button>
+                                                    <input type="hidden" name="title" value="{{qa.title}}"/>
+                                                    <input type="hidden" name="id" value="{{qa.id}}"/>
+                                                    <div class="date">
+                                                     {% if qa.fixed %}
+                                                    <span class="badge badge-info">Çözüldü</span>
+                                                    {%else%}
+                                                        <span class="badge badge-warning">Yardım</span>
+                                                    {%endif%}
+                                                        <small>&nbsp;{{ qa.publish }}</small>
+                                                    </div>
+                                                </div>
+
+                                                <div class="post">
+                                                  <p class="mb-1">{{ qa.body | truncatewords:"15"|linebreaks }}</p>
+                                                </div>
+
+<style>
+    .btn-link {
+border: none;
+outline: none;
+background: none;
+cursor: pointer;
+color: #75CAEB;
+padding: 0;
+text-decoration: none;
+font-family: inherit;
+font-size: inherit;
+}
+</style>
+                                                                    </div>
+                                                                    </div>
+
+
+                             </form>
+
+{% endfor %}
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+</div>
+
+{% endblock%}

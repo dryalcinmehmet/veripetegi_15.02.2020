@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% load comments %}
+{% load comments_xtd %}
+{% load auth_extras %}
+{% block title %}{{ object.title }}{% endblock %}
+{% if user.is_authenticated %}
+    {% block content %}
+<head>
+                      <style>
+                            p input {
+                              border: none;
+                              background-color: #feecde;
+                              display: inline;
+                              font-family: inherit;
+                              font-size: 10pt;
+                              padding: none;
+                              width: 100%;
+                            }
+                        </style>
+</head>
+<div class="container">
+
+    <div class="row">
+      <div class="col">
+      <img src="{% static 'img/blog-banner.jpg' %}" style="width: 100%;"></img>
+      </div>
+    </div>
+
+    <div class="row">
+       <div class="col">
+      <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'profile' %}">Profil Bilgileri</a></li>
+      <li class="breadcrumb-item active">{{ user.get_username }}</li>
+    </ol>
+       </div>
+    </div>
+
+
+<div class="profile">
+
+
+
+
+    <div class="row">
+            <div class="col">
+
+                <form  method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="card border-ligth mb-3" style="max-width: 100rem; margin:10px auto;">
+
+                  {% for model in profile %}
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item" >
+                        <div class="row">
+                        <div class="col-lg-2 border-right">
+                            <img width="100px" height="100px" src="{{model.avatar}}" />
+
+                        </div>
+                         <div class="col-lg-7 text-muted border-right" >
+                             <div style="padding-top:0.5rem;">{{model.first_name}} {{model.last_name}}</div>
+                             <div style="padding-top:2rem;">Son Giriş: {{user.last_login}}</div>
+                         </div>
+                          <div class="col-lg-2 text-muted" >
+                             <div style="padding-top:0.2rem; padding-right:0px;"> Blog Sayısı:</div>
+                             <div style="padding-top:0.4rem;  padding-right:0px;">Veriseti Sayısı:</div>
+                              <div style="padding-top:0.6rem;  padding-right:0px;">Soru Sayısı:</div>
+                         </div>
+                         <div class="col-lg-1 text-muted" >
+                             <div style="padding-top:0.2rem;  padding-left:0px;">{{object_list| length}}</div>
+                             <div style="padding-top:0.4rem;  padding-left:0px;">{{object_list_document| length}}</div>
+                              <div style="padding-top:0.6rem;  padding-left:0px;">{{object_list_qa| length}}</div>
+                         </div>
+
+                        </div>
+
+
+                    </li>
+
+
+                  </ul>
+
+                  {%endfor%}
+                </div>
+                </form>
+
+
+
+
+            </div>
+    </div>
+
+    {%if not edit_or_save%}
+    <div class="row">
+            <div class="col">
+
+
+                <div class="card border-ligth mb-3" style="max-width: 100rem; margin:10px auto;">
+                  <div class="card-header text-muted" >
+                      <form  action="{% url 'profile' %}" method="get" accept-charset="utf-8"> {% csrf_token %}
+                      <div class="row" >
+
+                          <div class="col" align="left">Hesap</div>
+                              <input type="hidden" name="edit" value="go-edit">
+                          <div class="col" align="right" style="height:50%;"><button type="submit" class="btn btn-outline-info">Edit</button></div>
+
+
+                      </div>
+                          </form>
+
+
+                  </div>
+                  {% for model in profile %}
+                  <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item" >
+                        <label class="text-muted h5">Kullanıcı Adı</label>
+                        <p class="h6 font-weight-bold" style="color:black;"><span class="badge badge-danger">{{user.username}}</span> </p>
+                        <p class="text-muted h7">*Bu alan değiştirilemez.</p>
+                    </li>
+
+                    <li class="list-group-item" >
+                        <label class="text-muted h5">Ad</label>
+                        <p class="h6 font-weight-bold" style="color:black;">{{model.first_name}}</p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+                    <li class="list-group-item" >
+                        <label class="text-muted h5">Soyad</label>
+                        <p class="h6 font-weight-bold" style="color:black;">{{model.last_name}}</p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+                    <li class="list-group-item" >
+                        <label class="text-muted h5">Meslek</label>
+                        <p class="h6 font-weight-bold" style="color:black;">{{model.job}}</p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+                    <li class="list-group-item" >
+                        <label class="text-muted h5">Üniversite</label>
+                        <p class="h6 font-weight-bold" style="color:black;">{{model.uni}}</p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+                    <li class="list-group-item" >
+                        <label class="text-muted h5">Yetenekler</label>
+                        <p class="h6 font-weight-bold" style="color:black;">{{model.talents}}</p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+
+                  </ul>
+
+                  {%endfor%}
+                </div>
+
+
+
+
+
+            </div>
+    </div>
+    {%else%}
+    <div class="row">
+            <div class="col">
+
+                <form  method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="card border-ligth mb-3" style="max-width: 100rem; margin:10px auto;">
+                  <div class="card-header text-muted ">
+                      <div class="row">
+
+                          <div class="col" align="left"> Hesap (Kullanıcı ID: <span class="badge badge-danger">{{user.username}}</span> )</div>
+                          <div class="col" align="right"><button type="submit" class="btn btn-outline-green">Save</button></div>
+
+
+                      </div>
+
+
+                  </div>
+                  {% for model in profile %}
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item" >
+                        <label class="text-muted h5" for="first_name">Ad</label>
+                        <p><input name="first_name" value="{{model.first_name}}" id="first_name" /></p>
+
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+
+
+                    <li class="list-group-item" >
+                        <label class="text-muted h5" for="last_name">Soyad</label>
+                        <p><input  name="last_name" type="text" value="{{model.last_name}}" id="last_name"/></p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+                    <li class="list-group-item">
+                        <label class="text-muted h5" for="job">Meslek</label>
+                        <p><input  name="job" type="text" value="{{model.job}}" id="job"/></p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+                    <li class="list-group-item" >
+                        <label class="text-muted h5" for="uni">Üniversite</label>
+                        <p><input name="uni" type="text" value="{{model.uni}}"id="uni"/></p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+                    <li class="list-group-item" >
+                        <label class="text-muted h5" for="talents">Yetenekler</label>
+                        <p><input  name="talents" type="text" value="{{model.talents}}" id="talents"/></p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+
+                    <li class="list-group-item" >
+                        <label class="text-muted h5" for="location">Yaşadığınız Yer</label>
+                        <p><input  name="location" type="text" value="{{model.location}}" id="location"/></p>
+                        <p class="text-muted h7">*Bu alan değiştirilebilir.</p>
+                    </li>
+
+                    <li class="list-group-item">
+
+                            <div class="card card-body">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <div class="card-text">
+                                    {%for av in avatar_list%}
+
+                                  <label class="btn" for="option1">
+                                    <input type="radio"  id="option1" autocomplete="off" name="avatar" value="{{av}}" checked="" ><img src="{{av}}" width="100px" height="100px">
+                                  </label>
+                                 {%endfor%}
+                                </div>
+                                </div>
+                            </div>
+
+                    </li>
+
+
+
+            </ul>
+            {%endfor%}
+            </div>
+            </form>
+
+
+
+
+            </div>
+    </div>
+    {%endif%}
+
+
+
+    
+    
+
+    <div class="row">
+        <div class="col">
+                    <div class="card-header text-warning" align="center"><small>Paylaştığım Verisetleri</small></div>
+                {% if object_list_document|length > 0 %}
+                    <div class="list-group">
+                             {% for file in object_list_document %}
+                                    <a href="{%url 'dataset-list' %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">{{file.dataset_title | truncatewords:"10"}}</h6>
+
+                                            <div class="date">
+                                                <span class="badge badge-info">veriseti</span>
+                                            <small>{{ file.publish_date }}</small>
+                                            </div>
+                                        </div>
+                                            <small>{{ file.publisher }}</small>
+                                        <div class="post">
+                                          <p class="mb-1">{{ post.file_name | truncatewords:"15"|linebreaks }}</p>
+                                        </div>
+
+                                    </a>
+                            {% endfor %}
+                    </div>
+            {%else%}
+                                <div class="card border-yok mb-3" style="max-width: 100rem;">
+
+                                <div class="card-body text-dark">
+                                <h5 class="card-title"></h5>
+                                <p class="card-text" align="center">Henüz bir veriseti paylaşmadınız. Paylaşmak için  <a href="{%url 'send-question'%}">tıklayın</a>.</p>
+                                </div>
+                                </div>
+                        {%endif%}
+        </div>
+    </div>
+
+
+    <div class="row">
+            <div class="col">
+                    <div class="card-header text-warning" align="center"><small>Paylaştığım Bloglar</small></div>
+                         {% if request.user|has_group:"Yazar" %}
+                                {% if object_list|length > 0 %}
+                                <div class="list-group">
+                                {% for post in object_list %}
+                                        <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">{{post.title | truncatewords:"40"}}</h5>
+                                                <div class="date">
+                                                    <p> <span class="badge badge-warning">blog </span>
+                                                    <small>{{ post.publish }}</small>
+                                                    <small class="mb-1">Kategory: {{post.category}}</small></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="post">
+                                            <p class="mb-1">{{ post.body | truncatewords:"15"|linebreaks }}</p>
+                                            </div>
+
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                                   {%else%}
+                                <div class="card border-yok mb-3" style="max-width: 100rem;">
+
+                                <div class="card-body text-dark">
+                                <h5 class="card-title"></h5>
+                                <p class="card-text" align="center">Henüz blog paylaşmadınız. Paylaşmak için  <a href="{%url 'add-post'%}">tıklayın</a>.</p>
+                                </div>
+                                </div>
+                                {%endif%}
+                        {%else%}
+                                <div class="card border-yok mb-3" style="max-width: 100rem;">
+
+                                <div class="card-body text-dark">
+                                <h5 class="card-title"></h5>
+                                <p class="card-text" align="center">Bu alan sadece yazarlar içindir. Yazar başvurusu için <a href="{%url 'author-apply'%}">tıklayın</a>.</p>
+                                </div>
+                                </div>
+                        {%endif%}
+
+            </div>
+
+
+
+    </div>
+
+     <div class="row">
+            <div class="col">
+                    <div class="card-header text-warning" align="center"><small>Paylaştığım Sorunlar</small></div>
+
+                         {% if object_list_qa|length > 0 %}
+                                <div class="list-group">
+                                {% for qa in object_list_qa %}
+                                        <a href="{% url 'q&a-list'%}" class="list-group-item list-group-item-action flex-column align-items-start">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">{{qa.title | truncatewords:"40"}}</h5>
+                                                <div class="date">
+                                                    <p>   {% if qa.fixed %}
+                                                    <span class="badge badge-info">Çözüldü</span>
+                                                    {%else%}
+                                                        <span class="badge badge-warning">Sorun</span>
+                                                    {%endif%}
+                                                    <small>{{ qa.publish }}</small>
+                                                    <small class="mb-1">Kategory: {{qa.category}}</small></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="post">
+                                            <p class="mb-1">{{ qa.body | truncatewords:"15"|linebreaks }}</p>
+                                            </div>
+
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                        {%else%}
+                                <div class="card border-yok mb-3" style="max-width: 100rem;">
+
+                                <div class="card-body text-dark">
+                                <h5 class="card-title"></h5>
+                                <p class="card-text" align="center">Henüz bir sorun paylaşmadınız. Yeni sorun açmak için <a href="{%url 'send-question'%}">tıklayın</a>.</p>
+                                </div>
+                                </div>
+                        {%endif%}
+
+            </div>
+
+
+
+    </div>
+
+</div>
+</div>
+
+
+
+{%endblock%}
+
+{% else %}
+    <p>Welcome, new user. Please log in.</p>
+{% endif %}
+
+

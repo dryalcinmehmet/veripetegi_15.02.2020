@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+
+<div class="container">
+
+<div class="row">
+    <div class="col">
+    <img style="margin: 0px auto; width: 100%;" src="{% static 'img/blog-banner.jpg' %}"></img>
+     </div>
+</div>
+
+
+    <div class="row">
+       <div class="col">
+      <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+      <li class="breadcrumb-item active"><a href="{% url 'add-dataset' %}">Veriseti Yükle</a></li>
+    </ol>
+       </div>
+    </div>
+
+
+{% if user.is_authenticated %}
+<div class="card border-yok  mb-3" style="max-width: 100rem;">
+<div class="card-header" align="center">Yeni Veriseti Ekle</div>
+<div class="card-body text-info">
+    <h5 class="card-title"></h5>
+
+
+
+            <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+
+
+      <fieldset>
+
+
+             <div class="form-group">
+
+
+
+    </div>
+
+     <div class="form-group">
+  <fieldset>
+   
+    <input class="form-control" id="dataset_title" name="dataset_title" required type="text" placeholder="Veriseti için başlık giriniz">
+	   {%if exist_file%}
+      <h6  class="form-text text-danger text-width-bold">
+          Başlığınız var olan {{exist_file.file_name}} veriseti ile aynı başlığı taşıyor. Göndermeden önce mevcut blogu inceleyiniz. Eğer içerik farklı ise farklı bir başlık ile gönderebilirsiniz.
+      </h6>
+     {%endif%}
+  </fieldset>
+</div>
+
+              
+             
+              <div class="form-group">
+                <select class="custom-select" name="category" id="id_category" required>
+				<option value="" selected>Kategori Seçiniz</option>
+				<option value="Futbol">Futbol</option>
+				<option value="Finans">Finans</option>
+				<option value="Teknoloji">Teknoloji</option>
+			</select>
+              </div>
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input"  required name="document" id="id_document" accept=".csv,.txt,.text,.json">
+                    <label class="custom-file-label" for="id_document">.txt, .csv, .json</label>
+					        	  <script>
+            $('#id_document').on('change',function(){
+                //get the file name
+                var fileName = $(this).val();
+            
+				var filenameWithExtension = fileName.replace(/^.*[\\\/]/, '');
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(filenameWithExtension);
+            })
+        </script>
+                  </div>
+				</div>
+			  </div>
+      </fieldset>
+      <div style="margin: 10px auto;" align="center">
+           <button type="submit" class="save btn btn-warning" style=" text-transform: none;">Gönder</button>
+        <button  class="save btn btn-warning" style=" text-transform: none;">Vazgeç</button>
+      </div>
+
+</form>
+
+</div>
+</div>
+{% else %}
+	    <div class="card border-yok mb-3" style="max-width: 100rem;">
+		<div class="card-header" align="center"><small>Bilgi</small></div>
+		<div class="card-body ">
+		<h5 class="card-title">
+			<p class="card-text" align="center">Veriseti yüklemek için üye girişi yapmanız gerekmektedir. Giriş yapmak için       <a href="{%url 'login' %}"> tıklayın</a>. Üye değilseniz <a href="{% url 'signup' %}">buraya</a> tıklayarak üye olabilirsiniz.</p></h5>
+		</div>
+		</div>
+	{% endif%}
+	
+</div>
+
+
+<div>
+</div>
+
+    {% endblock %}

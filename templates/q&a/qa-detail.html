@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+
+<div class="container">
+    
+    <script>
+    
+    </script>
+    <div class="row">
+    <div class="col-lg-12">
+         <img src="{% static 'img/blog-banner.jpg' %}"style="width: 100%;">
+    </div>
+    </div>
+    <div class="row">
+    <div class="col">
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'homepage' %}">Anasayfa</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'q&a-list' %}">Soru & Cevap</a></li>
+    <li class="breadcrumb-item active">Soru Detay</li>
+    </ol>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col">
+    
+    
+    
+    
+    <form  id="edit" action="{% url 'send-question' %}" method="get" accept-charset="utf-8"> {% csrf_token %}
+    
+    {% for qa in object_list %}
+    <div class="card border-yok  mb-3" style="max-width: 100rem;">
+    
+    <div class="card-header" style="height:50px;">
+        <div class="row">
+            <div class="col-lg-10" align="left">
+                <div class="row" style="margin-top:5px;">
+    
+                    <div class="col-lg-2" align="center" style="padding-left:0px;"><p class="border-right">Yazar<small> : {{qa.author}}</small></p> </div>
+                    <div class="col-lg-3" align="center" style="padding-left:0px;"><p class="border-right">Tarih<small> : {{ qa.publish|date:"l, j F Y" }}</small></p> </div>
+                     <div class="col-lg-7" align="left" ><p>Cevaplar:&nbsp;{{ answer_list|length }}</p></div>
+                </div>
+    
+            </div>
+    
+    
+            <div class="col-lg-2" align="right">
+                 <p align="right">
+    
+    
+                  {% if user.is_authenticated and user == qa.author %}
+    
+    
+                            <button type="submit" name="edit_or_delete" value="Düzenle" style="outline: none; background-color:#F7F7F7; border:none; width:30px; height:30px; text-align:center;">
+                            <span   class="glyphicon glyphicon-edit text-info" style="font-size:18px;"></span>
+                            </button>
+    
+    
+                            <button type="submit" name="edit_or_delete" value="Sil" style="outline: none; background-color:#F7F7F7; border:none; width:30px; height:30px; text-align:center;">
+                            <span   class="glyphicon glyphicon-trash text-warning" style="font-size:18px;"></span>
+                            </button>
+    
+    
+                                 <input type="hidden"  name="title" value="{{ qa.title}}">
+                                <input type="hidden"  name="id" value="{{ qa.id}}">
+    
+                              <style type="text/css">
+                                .icon-input-btn{
+                                display: inline-block;
+                                position: relative;
+                                }
+                                .icon-input-btn input[type="submit"]{
+                                padding-left: 2em;
+                                }
+                                .icon-input-btn .glyphicon{
+                                display: inline-block;
+                                position: absolute;
+                                left: 0.65em;
+                                top: 20%;
+                                }
+                                </style>
+                                <script type="text/javascript">
+                                $(document).ready(function(){
+                                $(".icon-input-btn").each(function(){
+                                var btnFont = $(this).find(".btn").css("font-size");
+                                var btnColor = $(this).find(".btn").css("color");
+                                $(this).find(".glyphicon").css("font-size", btnFont);
+                                $(this).find(".glyphicon").css("color", btnColor);
+                                if($(this).find(".btn-xs").length){
+                                $(this).find(".glyphicon").css("top", "24%");
+                                }
+                                });
+                                });
+                                </script>
+    
+            {%endif%}
+    
+    
+        </p>
+            </div>
+        </div>
+    
+    
+    
+    </div>
+    
+    <div class="card-body ">
+            <h5 class="card-title">{{ qa.title }}</h5>
+    
+            <div class="date text-right">
+    
+            </div>
+    
+            <p class="card-text" align="center" id="ChangeBody"> {{ qa.body|linebreaks }}</p>
+    </div>
+    
+    <div class="py-4 text-center">
+        <a href="{% url 'q&a-list' %}">Sorun Listesine Dön</a>
+    </div>
+    
+    
+    <div class="card-header" style="height:2rem; padding-top:0px;" align="right">
+        <section style="margin: 2px auto;">
+              <span class="badge badge-warning">Yazar</span>
+        </section>
+    
+    </div>
+    </div>
+    
+    
+    
+    {%endfor%}
+    
+    </form>
+    
+    </div>
+    </div>
+    {% if answer_list|length > 0 %}
+    <div class="row" style="max-width:100rem; margin: 0px auto;">
+    
+    <div class="col card border-ligth mb-2" style="padding:0px; max-width:100rem;">
+    
+    
+    <script  type="text/javascript">
+    var arr2=[];
+    var a = "{{scroll_unique}}";
+    console.log(a);
+    
+    {%if scroll_unique%}
+    jQuery(document).ready(function($){
+            $('html, body').animate({
+                    scrollTop: $("#show_answer_" + a).offset().top-500
+                }, 1000);
+            });
+    
+    {%endif%}
+    console.log(a);
+    
+    
+    </script>
+    {% for answer in answer_list %}
+    <div id="{{scroll_unique}}"></div>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item" >
+    
+    <div class="row" style="padding:0px;">
+    
+        <div class="col-lg-2 border-right text-muted h7" align="center">
+            <div class="row ">
+            <img style="width:50%; height:40%; margin:0px auto;" src="{% get_profile answer.author as profile %}{{profile.avatar}}" />
+            </div>
+    
+            <div style="padding-top:0.2rem;  font-size:8pt;">{% get_profile answer.author as profile %}{{profile.user}}</div>
+            <div style="padding-top:0.4rem; font-size:10pt;">{% get_profile answer.author as profile %}{%for i in profile.rank|rjust:profile.rank%}<i class="fa fa-star-half-full text-warning"></i>&nbsp;{%endfor%}</div>
+            <div style="padding-top:0.6rem; font-size:6pt;">{{ answer.publish|date:"l, j F Y g:i a" }}</div>
+    
+        </div>
+    
+        <div class="col-lg-10" style=" padding:0px;">
+    
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <div class="edit_delete" align="right"  style=" padding:10px;">
+    
+    
+    
+    {% if user.is_authenticated and user == answer.author %}
+            
+            <button onclick="EditSave('{{answer.unique}}')"  style="outline: none; background-color:white; border:none; width:30px; height:30px; text-align:center;">
+            <span data-toggle="tooltip"  data-placement="bottom" title="" data-original-title="Düzenle" aria-describedby="tooltip910430" id="editable_answer_{{answer.unique}}"  class="glyphicon glyphicon-edit text-info" style="font-size:18px;"></span>
+            </button>
+            
+    
+            <button onclick="Delete('{{answer.unique}}')"  style="outline: none; background-color:white; border:none; width:30px; height:30px; text-align:center;">
+            <span data-toggle="tooltip"  data-placement="bottom" title="" data-original-title="Sil" aria-describedby="tooltip910430" id="delete_answer_{{answer.unique}}"  class="glyphicon glyphicon-trash text-warning" style="font-size:18px;"></span>
+            </button>
+                <style>
+                      .tooltip-inner {  background-color: #6610f2;}
+                </style>
+    {%endif%}
+    
+    
+    
+    
+            <script>
+    
+            arr2.push("{{answer.unique}}")
+    
+            function Delete(unique) {
+    
+            console.log(arr2);
+            console.log("id:",unique);
+    
+    
+          
+            var icon = document.getElementById("delete_answer_"+unique)
+    
+            console.log(icon);
+            if(icon.className=="glyphicon glyphicon-trash text-warning")
+            {
+            icon.className="glyphicon glyphicon-remove text-danger"
+    
+    
+    
+    
+    
+    
+            }
+            else if(icon.className=="glyphicon glyphicon-remove text-danger")
+            {
+            icon.className="glyphicon glyphicon-trash text-warning"
+    
+    
+    
+    
+            document.getElementById('delete_answer_form_'+unique).submit();
+            
+    
+            
+            };
+    
+            };
+    
+    
+    
+            function EditSave(unique) {
+    
+            console.log("id:",unique);
+            var icon = document.getElementById("editable_answer_"+unique)
+            console.log(icon);
+            if(icon.className=="glyphicon glyphicon-edit text-info")
+            {
+            icon.className="glyphicon glyphicon-save text-warning"
+    
+    
+            if(document.getElementById('edit_answer_'+unique).style.display=='none') {
+            document.getElementById('edit_answer_'+unique).style.display='block';
+            }
+    
+            if(document.getElementById('show_answer_'+unique).style.display=='block') {
+            document.getElementById('show_answer_'+unique).style.display='none';
+            }
+    
+    
+    
+    
+            }
+            else if(icon.className=="glyphicon glyphicon-save text-warning")
+            {
+            icon.className="glyphicon glyphicon-edit text-info"
+    
+    
+            if(document.getElementById('show_answer_'+unique).style.display=='none') {
+            document.getElementById('show_answer_'+unique).style.display='block';
+            }
+    
+    
+    
+            if(document.getElementById('edit_answer_'+unique).style.display=='block') {
+            document.getElementById('edit_answer_'+unique).style.display='none';
+            }
+    
+            document.getElementById('edit_answer_form_'+unique).submit();
+            
+    
+            var div_id="#show_answer_"+unique;
+            //$('html,body').animate({scrollTop:$(div_id).offset().top}, 'fast');
+     
+            };
+    
+            };
+    
+    
+            </script>
+    
+            </div >
+            <div id="delete_here_{{delete_answer}}"></div>
+            <div id="show_answer_{{answer.unique}}"  style="padding-left:5px; display:block; "  >
+    
+            <p align="center" >
+            {{ answer.body|linebreaks }}
+            </p>
+    
+            <form id="delete_answer_form_{{answer.unique}}"  method="post" enctype="multipart/form-data"> {% csrf_token %}
+            <input type="hidden" name="unique" value="{{answer.unique}}">
+            <input type="hidden" name="edit_or_save" value="delete">
+            <textarea style="display:none;" name="body" >{{answer.body}}</textarea>
+            </form>
+            </div>
+    
+            <div id="edit_answer_{{answer.unique}}"  style="padding-left:5px; display:none; " >
+            <form id="edit_answer_form_{{answer.unique}}" name="refresh_edit" method="post" enctype="multipart/form-data"> {% csrf_token %}
+            <input type="hidden" name="unique" value="{{answer.unique}}">
+            <input type="hidden" name="edit_or_save" value="save">
+            <textarea class="form-control" name="body"  rows="3" >{{answer.body}}</textarea>
+    
+            </form>
+    
+            </div>
+    
+    
+        </div>
+    
+    </div>
+    <div class="row" style="padding:0px;">
+        <div class="col-lg-12" style="padding:0px;">
+    
+            <div class="answer-footer" align="right" style=" padding:0px;">
+    
+                <small>
+                    {%if  answer.edit_time%}
+    <span class="badge badge-warning"> Son Düzenleme Tarihi:</span> {{answer.edit_time|date:'Y-m-d H:i'}}
+                    {%endif%}
+                </small>
+            </div>
+        </div>
+    </div>
+    </li>
+    </ul>
+    {%endfor%}
+    </div>
+    </div>
+    {% else %}
+    <div class="card text-warning  mb-3" style="max-width: 100rem;">
+    
+    <div class="card-body" align="center">
+    <h6 class="card-title">0 cevap mevcut</h6>
+    </div>
+    </div>
+    {%endif%}
+    <div class="row">
+    <div class="col">
+    <div id="{{new_answer}}"></div>
+     
+     {% if user.is_authenticated%}
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    
+    
+    
+    <div class="form-group">
+    <label  for="id_body"></label>
+    <textarea class="form-control" name="body" id="id_body" rows="3" placeholder="Cevapla.."></textarea>
+    </div>
+    
+    
+    
+    <button class="btn btn-info my-2 my-sm-0" type="submit" style="margin-left:0px;width: 14%;">Gönder</button>
+    
+    </form>
+    {%else%}
+     <div class="card border-yok">
+         <div class="card-text text-muted" align="center">
+             Cevap yazmak için giriş yapmanız gerekmektedir. Giriş yapmak için <a href="{% url 'login' %}">buraya</a> tıklayın.
+         </div>
+     </div>
+    {%endif%}
+    </div>
+    </div>
+    
+</div>
+
+{% endblock%}
